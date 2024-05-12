@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --build",
     "start": "npx nodemon"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ismail Dincer",
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

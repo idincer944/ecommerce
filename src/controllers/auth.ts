@@ -5,7 +5,6 @@ import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../secrets';
 import { BadRequestsException } from '../exceptions/bad-request';
 import { ErrorCode } from '../exceptions/root';
-import { UnprocessableEntity } from '../exceptions/validation';
 import { SignUpSchema } from '../schema/users';
 import { NotFoundException } from '../exceptions/not-found';
 
@@ -41,4 +40,8 @@ export const login = async (req:Request, res:Response) => {
     const token = jwt.sign({userId: user.id}, JWT_SECRET)
 
     res.json({user, token})
+}
+
+export const me = async (req:Request, res:Response) => {
+    res.json(req.user)
 }
