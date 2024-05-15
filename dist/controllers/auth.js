@@ -59,6 +59,7 @@ const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.signup = signup;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    users_1.LoginSchema.parse(req.body);
     const { email, password } = req.body;
     let user = yield __1.prismaClient.user.findFirst({ where: { email } });
     if (!user) {

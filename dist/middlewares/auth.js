@@ -41,6 +41,7 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     const token = req.headers.authorization;
     if (!token) {
         next(new unauthorized_1.UnauthorizedException('Unauthorized', root_1.ErrorCode.UNAUTHORIZED));
+        return;
     }
     try {
         const payload = jwt.verify(token, secrets_1.JWT_SECRET);

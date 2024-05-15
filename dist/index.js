@@ -15,6 +15,23 @@ app.use("/api", routes_1.default);
 app.use(errors_1.errorMiddleware);
 exports.prismaClient = new client_1.PrismaClient({
     log: ["query"],
+}).$extends({
+    result: {
+        address: {
+            formattedAddress: {
+                needs: {
+                    lineOne: true,
+                    lineTwo: true,
+                    city: true,
+                    country: true,
+                    pincode: true
+                },
+                compute: (addr) => {
+                    return `${addr.lineOne}, ${addr.lineTwo}, ${addr.city}, ${addr.country}-${addr.pincode} `;
+                }
+            }
+        }
+    }
 });
 app.listen(secrets_1.PORT, () => {
     console.log(`Running on port: ${secrets_1.PORT}`);
