@@ -5,6 +5,7 @@ import { addItemToCart, changeQuantity, deleteItemFromCart, getCart } from "../c
 
 const cartRoutes:Router = Router()
 
+// User Routes
 cartRoutes.post('/', authMiddleware, errorHandler(addItemToCart))
 cartRoutes.put('/:id', authMiddleware, errorHandler(changeQuantity))
 cartRoutes.delete('/:id', authMiddleware, errorHandler(deleteItemFromCart))

@@ -123,3 +123,68 @@ export const getOrderById = async (req: Request, res: Response) => {
     }
     
 }
+
+export const listAllOrders = async(req: Request, res: Response) => {
+    let whereClause = {}
+    const status = req.query.status
+    if (status) {
+        whereClause = {
+            status
+        }
+    }
+    const skip = req.query.skip ? +req.query.skip : 0; 
+    const orders = await prismaClient.order.findMany({
+        where: whereClause,
+        skip: skip,
+        take: 5
+    })
+    res.json(orders)
+}
+
+export const changeStatus = async(req: Request, res: Response) => {
+    const transaction = await prismaClient.$transaction(async(tx) => {
+        try {
+            const order = await tx.order.update({
+                where: {
+                    id: +req.params.id
+                },
+                data : {
+                    status: req.body.status
+                }
+            })
+            if (!order) {
+                throw new NotFoundException('Order not found', ErrorCode.ORDER_NOT_FOUND)
+            }
+            await tx.orderEvent.create({
+                data: {
+                    orderId: order.id,
+                    status: req.body.status
+                }
+            })
+            return order
+        } catch (error) {
+            throw new NotFoundException('Order not found', ErrorCode.ORDER_NOT_FOUND)
+        }
+    })
+    res.json(transaction)
+}
+
+export const listUserOrders = async(req: Request, res: Response) => {
+    let whereClause: any = {
+        userId: +req.params.id
+    }
+    const status = req.params.status
+    if (status) {
+        whereClause = {
+            ...whereClause,
+            status
+        }
+    }
+    const skip = req.query.skip ? +req.query.skip : 0; 
+    const orders = await prismaClient.order.findMany({
+        where: whereClause,
+        skip: skip,
+        take: 5
+    })
+    res.json(orders)
+}
