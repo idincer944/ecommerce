@@ -72,3 +72,26 @@ export const getProductById = async(req: Request, res: Response) => {
         
     }
 }
+
+export const searchProducts = async (req: Request, res: Response) => {
+    const searchTerm = req.query.q?.toString() || ''; // Default to empty string if query parameter is undefined
+
+    const page = req.query.page ? parseInt(req.query.page.toString()) : 1; // Default to page 1 if not specified
+    const pageSize = req.query.pageSize ? parseInt(req.query.pageSize.toString()) : 10; // Default to 10 items per page if not specified
+
+    const skip = (page - 1) * pageSize;
+
+    const products = await prismaClient.product.findMany({
+        where: {
+            OR: [
+                { name: { contains: searchTerm } },
+                { description: { contains: searchTerm } },
+                { tags: { contains: searchTerm } }
+            ]
+        },
+        skip: skip,
+        take: pageSize
+    });
+
+    res.json(products);
+}
