@@ -3,7 +3,6 @@ import { PORT } from "./secrets";
 import rootRouter from "./routes";
 import { PrismaClient } from "@prisma/client";
 import { errorMiddleware } from "./middlewares/errors";
-import { SignUpSchema } from "./schema/users";
 
 const app = express();
 app.use(express.json());
@@ -31,6 +30,8 @@ export const prismaClient = new PrismaClient({
   }
 })
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Running on port: ${PORT}`);
 });
+
+export { app, server };
